@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SopaMaster Pro | Generador de Sopas de Letras Profesionales</title>
+    <title>SopaMaster Pro | Generador de Sopas de Letras Profesional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -23,31 +23,27 @@
             background-image: radial-gradient(#d1d5db 0.5px, #f3f4f6 0.5px); 
             background-size: 10px 10px; 
         }
-        /* Estilos dinámicos para colores */
         .theme-indigo { --main-color: #4f46e5; --main-bg: #e0e7ff; }
         .theme-green { --main-color: #16a34a; --main-bg: #d1fae5; }
         .theme-red { --main-color: #dc2626; --main-bg: #fee2e2; }
         .theme-bw { --main-color: #000000; --main-bg: #f3f4f6; }
-        
         .dynamic-title { color: var(--main-color); border-color: var(--main-color); }
-        .dynamic-btn { bg: var(--main-color); }
+        .tab-active { background-color: #4f46e5; color: white; }
     </style>
 </head>
 <body class="bg-pattern min-h-screen font-sans theme-indigo" id="body-theme">
 
-    <nav class="bg-indigo-700 p-4 shadow-lg no-print text-left dynamic-bg">
+    <nav class="bg-indigo-700 p-4 shadow-lg no-print text-left transition-colors duration-300">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-white font-black text-2xl tracking-tighter italic">SOPAMASTER PRO</h1>
-            <div class="flex gap-2">
-                <button onclick="openModal('privacy-modal')" class="text-indigo-100 text-xs hover:text-white transition">Privacidad</button>
-            </div>
+            <button onclick="openModal('privacy-modal')" class="text-indigo-100 text-xs font-bold uppercase hover:text-white">Privacidad</button>
         </div>
     </nav>
 
     <main class="max-w-6xl mx-auto p-6 text-center">
         
         <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 no-print mb-10 text-left">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Panel de Control Profesional</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Panel de Control</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                 <div>
@@ -55,133 +51,91 @@
                     <input type="text" id="sopa-title-input" placeholder="Ej: Mis Palabras" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Tamaño de Cuadrícula</label>
-                    <select id="grid-size" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Tamaño</label>
+                    <select id="grid-size" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer">
                         <option value="10">Pequeño (10x10)</option>
                         <option value="15" selected>Normal (15x15)</option>
                         <option value="20">Grande (20x20)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Nivel de Dificultad</label>
-                    <select id="difficulty" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Dificultad</label>
+                    <select id="difficulty" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer">
                         <option value="easy">Fácil</option>
                         <option value="medium" selected>Medio</option>
                         <option value="hard">Difícil</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Estilo Visual</label>
-                    <div class="flex gap-2 mt-2">
-                        <button onclick="setTheme('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-white shadow-md active:scale-95"></button>
-                        <button onclick="setTheme('green')" class="w-8 h-8 rounded-full bg-green-600 border-2 border-white shadow-md active:scale-95"></button>
-                        <button onclick="setTheme('red')" class="w-8 h-8 rounded-full bg-red-600 border-2 border-white shadow-md active:scale-95"></button>
-                        <button onclick="setTheme('bw')" class="w-8 h-8 rounded-full bg-black border-2 border-white shadow-md active:scale-95"></button>
+                    <label class="block text-sm font-bold text-gray-700 mb-2 text-center md:text-left">Color de Hoja</label>
+                    <div class="flex gap-2 mt-2 justify-center md:justify-start">
+                        <button onclick="setTheme('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 border-2 border-white shadow-md active:scale-90"></button>
+                        <button onclick="setTheme('green')" class="w-8 h-8 rounded-full bg-green-600 border-2 border-white shadow-md active:scale-90"></button>
+                        <button onclick="setTheme('red')" class="w-8 h-8 rounded-full bg-red-600 border-2 border-white shadow-md active:scale-90"></button>
+                        <button onclick="setTheme('bw')" class="w-8 h-8 rounded-full bg-black border-2 border-white shadow-md active:scale-90"></button>
                     </div>
                 </div>
             </div>
 
-            <label class="block text-sm font-bold text-gray-700 mb-2">Escribe tus palabras (separadas por comas)</label>
-            <textarea id="word-list" rows="2" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-xl mb-6 outline-none focus:ring-2 focus:ring-indigo-500" placeholder="SOL, LUNA, MARTE..."></textarea>
+            <label class="block text-sm font-bold text-gray-700 mb-2">Escribe palabras separadas por comas (Máximo 15-20)</label>
+            <textarea id="word-list" rows="2" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-xl mb-6 outline-none focus:ring-2 focus:ring-indigo-500 transition-all" placeholder="PALABRA1, PALABRA2, PALABRA3..."></textarea>
             
-            <button onclick="initSopa()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg text-lg dynamic-btn-bg">🚀 GENERAR DOCUMENTO</button>
+            <button id="btn-generate" onclick="initSopa()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg text-lg">🚀 GENERAR SOPA DE LETRAS</button>
         </div>
 
         <div class="mt-8 mb-12 no-print text-left">
-            <h3 class="text-lg font-bold text-gray-700 mb-6 px-2 italic underline decoration-indigo-300">Temas Listos (10 palabras):</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                <button onclick="setThemeSug('Selva', 'LEON, TIGRE, MONO, SERPIENTE, JIRAFA, TUCAN, CEBRA, PANTERA, RINOCERONTE, COCODRILO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦁</span><span class="font-bold text-gray-600 text-[10px] uppercase">Selva</span></button>
-                <button onclick="setThemeSug('Espacio', 'PLANETA, COHETE, ESTRELLA, GALAXIA, LUNA, SOL, COMETA, ASTRONAUTA, METEORITO, ORBITA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🚀</span><span class="font-bold text-gray-600 text-[10px] uppercase">Espacio</span></button>
-                <button onclick="setThemeSug('Océano', 'TIBURON, BALLENA, PULPO, DELFIN, CORAL, MEDUSA, TORTUGA, CANGREJO, ESTRELLA, CALAMAR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🐙</span><span class="font-bold text-gray-600 text-[10px] uppercase">Océano</span></button>
-                <button onclick="setThemeSug('Frutas', 'MANZANA, PERA, PLATANO, UVA, FRESA, MANGO, SANDIA, PIÑA, CEREZA, NARANJA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍎</span><span class="font-bold text-gray-600 text-[10px] uppercase">Frutas</span></button>
-                <button onclick="setThemeSug('Escuela', 'LAPIZ, LIBRO, TAREA, RECREO, REGLA, EXAMEN, MOCHILA, MAESTRO, CLASE, PIZARRA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎒</span><span class="font-bold text-gray-600 text-[10px] uppercase">Escuela</span></button>
-                <button onclick="setThemeSug('Comida', 'PIZZA, PASTA, SOPA, ARROZ, CARNE, HUEVO, PAN, ENSALADA, TACO, QUESO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Comida</span></button>
-                <button onclick="setThemeSug('Instrumentos', 'PIANO, GUITARRA, VIOLIN, FLAUTA, TAMBOR, TROMBON, ARPA, SAXOFON, CLARINETE, TROMPETA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🎸</span><span class="font-bold text-gray-600 text-[10px] uppercase">Música</span>
-</button>
+            <h3 class="text-lg font-bold text-gray-700 mb-4 px-2 italic">Temas Listos para Elegir:</h3>
+            
+            <div class="flex flex-wrap gap-2 mb-6 px-2" id="tabs-container">
+                <button onclick="filterTabs('todas')" class="tab-btn px-4 py-2 rounded-full text-xs font-bold border border-indigo-200 bg-white hover:bg-indigo-50 transition tab-active" data-cat="todas">TODAS</button>
+                <button onclick="filterTabs('naturaleza')" class="tab-btn px-4 py-2 rounded-full text-xs font-bold border border-indigo-200 bg-white hover:bg-indigo-50 transition" data-cat="naturaleza">NATURALEZA</button>
+                <button onclick="filterTabs('hogar')" class="tab-btn px-4 py-2 rounded-full text-xs font-bold border border-indigo-200 bg-white hover:bg-indigo-50 transition" data-cat="hogar">HOGAR</button>
+                <button onclick="filterTabs('escuela')" class="tab-btn px-4 py-2 rounded-full text-xs font-bold border border-indigo-200 bg-white hover:bg-indigo-50 transition" data-cat="escuela">ESCUELA</button>
+                <button onclick="filterTabs('diversion')" class="tab-btn px-4 py-2 rounded-full text-xs font-bold border border-indigo-200 bg-white hover:bg-indigo-50 transition" data-cat="diversion">DIVERSIÓN</button>
+            </div>
 
-<button onclick="setThemeSug('Insectos', 'HORMIGA, ABEJA, MARIPOSA, GRILLO, MOSCA, MOSQUITO, ESCARABAJO, LIBELULA, ARAÑA, SALTAMONTES')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🐝</span><span class="font-bold text-gray-600 text-[10px] uppercase">Insectos</span>
-</button>
-
-<button onclick="setThemeSug('Profesiones', 'DOCTOR, INGENIERO, ABOGADO, POLICIA, BOMBERO, CHEF, PILOTO, DENTISTA, ENFERMERO, ARQUITECTO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">👨‍⚕️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Oficios</span>
-</button>
-
-<button onclick="setThemeSug('Prenda Ropa', 'CAMISA, PANTALON, ZAPATO, CHAQUETA, FALDA, VESTIDO, CALCETIN, GORRA, GUANTE, CINTURON')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">👕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Ropa</span>
-</button>
-
-<button onclick="setThemeSug('Verduras', 'ZANAHORIA, TOMATE, LECHUGA, CEBOLLA, PAPA, PEPINO, BROCOLI, ESPINACA, CALABAZA, AJO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🥦</span><span class="font-bold text-gray-600 text-[10px] uppercase">Verduras</span>
-</button>
-
-<button onclick="setThemeSug('Dinosaurios', 'REX, TRICERATOPS, RAPTOR, DIPLODOCUS, ESTEGOSAURIO, PTERODACTILO, ALOSAURIO, ANQUILOSAURIO, ESPINOSAURIO, BRAQUIOSAURIO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🦖</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dinos</span>
-</button>
-
-<button onclick="setThemeSug('Días y Meses', 'LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, ENERO, FEBRERO, MARZO, ABRIL, MAYO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">📅</span><span class="font-bold text-gray-600 text-[10px] uppercase">Calendario</span>
-</button>
-
-<button onclick="setThemeSug('Sentimientos', 'ALEGRIA, TRISTEZA, MIEDO, ENOJO, AMOR, SORPRESA, CALMA, CELOS, ASCO, CURIOSIDAD')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">😊</span><span class="font-bold text-gray-600 text-[10px] uppercase">Emociones</span>
-</button>
-
-<button onclick="setThemeSug('Habitación', 'CAMA, ALMOHADA, SABANA, ARMARIO, LAMPARA, ESPEJO, ALFOMBRA, CUADRO, SILLA, ESCRITORIO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🛏️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dormitorio</span>
-</button>
-
-<button onclick="setThemeSug('Cocina', 'PLATO, VASO, TENEDOR, CUCHARA, CUCHILLO, SARTEN, OLLA, HORNO, NEVERA, LICUADORA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🍳</span><span class="font-bold text-gray-600 text-[10px] uppercase">Cocina</span>
-</button>
-
-<button onclick="setThemeSug('Animales Mar', 'DELFIN, TIBURON, BALLENA, FOCA, PINGÜINO, MANATI, ORCA, CALAMAR, LANGOSTA, MEDUSA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🌊</span><span class="font-bold text-gray-600 text-[10px] uppercase">Marinos</span>
-</button>
-
-<button onclick="setThemeSug('Herramientas', 'MARTILLO, CLAVO, TORNILLO, PINZAS, SIERRA, LLAVE, TALADRO, METRO, NIVEL, LIMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🔨</span><span class="font-bold text-gray-600 text-[10px] uppercase">Taller</span>
-</button>
-
-<button onclick="setThemeSug('Aves', 'AGUILA, LORO, COLIBRI, BUHO, CISNE, PATO, PALOMA, FLAMENCO, CANARIO, PAVO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🦜</span><span class="font-bold text-gray-600 text-[10px] uppercase">Aves</span>
-</button>
-
-<button onclick="setThemeSug('Postres', 'PASTEL, HELADO, DONA, GALLETA, CHOCOLATE, GELATINA, FLAN, CHURRO, CARAMELO, BROWNIE')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🍰</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dulces</span>
-</button>
-
-<button onclick="setThemeSug('Fantasía', 'DRAGON, MAGO, HADA, UNICORNIO, SIRENA, DUENDE, GIGANTE, CASTILLO, ESPADA, POCIMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🦄</span><span class="font-bold text-gray-600 text-[10px] uppercase">Mágico</span>
-</button>
-
-<button onclick="setThemeSug('Cine', 'PELICULA, ACTOR, CAMARA, PANTALLA, DIRECTOR, GUION, COTUFA, OSCAR, SONIDO, BUTACA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🎬</span><span class="font-bold text-gray-600 text-[10px] uppercase">Cine</span>
-</button>
-
-<button onclick="setThemeSug('Higiene', 'JABON, CHAMPU, TOALLA, CEPILLO, PASTA, PEINE, ESPONJA, DUCHA, ESPEJO, CREMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🧼</span><span class="font-bold text-gray-600 text-[10px] uppercase">Baño</span>
-</button>
-
-<button onclick="setThemeSug('Naturaleza', 'MONTAÑA, RIO, BOSQUE, LAGO, CUEVA, DESIERTO, VALLE, CASCADA, SELVA, PRADERA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🏞️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Paisajes</span>
-</button>
-
-<button onclick="setThemeSug('Súper Héroes', 'PODER, CAPA, MASCARA, HEROE, VILLANO, JUSTICIA, FUERZA, VUELO, ESCUDO, MISION')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🦸</span><span class="font-bold text-gray-600 text-[10px] uppercase">Héroes</span>
-</button>
-
-<button onclick="setThemeSug('En el Baño', 'INODORO, LAVABO, ESPEJO, PAPEL, GRIFO, ALFOMBRA, TINA, JABONERA, PEINE, CEPILLO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-    <span class="text-xl block mb-1">🚽</span><span class="font-bold text-gray-600 text-[10px] uppercase">Higiene</span>
-</button>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3" id="themes-grid">
+                <button data-cat="naturaleza" onclick="setThemeSug('Selva', 'LEON, TIGRE, MONO, SERPIENTE, JIRAFA, TUCAN, CEBRA, PANTERA, RINOCERONTE, COCODRILO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦁</span><span class="font-bold text-gray-600 text-[10px] uppercase">Selva</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Espacio', 'PLANETA, COHETE, ESTRELLA, GALAXIA, LUNA, SOL, COMETA, ASTRONAUTA, METEORITO, ORBITA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🚀</span><span class="font-bold text-gray-600 text-[10px] uppercase">Espacio</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Frutas', 'MANZANA, PERA, PLATANO, UVA, FRESA, MANGO, SANDIA, PIÑA, CEREZA, NARANJA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍎</span><span class="font-bold text-gray-600 text-[10px] uppercase">Frutas</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Océano', 'TIBURON, BALLENA, PULPO, DELFIN, CORAL, MEDUSA, TORTUGA, CANGREJO, ESTRELLA, CALAMAR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🐙</span><span class="font-bold text-gray-600 text-[10px] uppercase">Océano</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Insectos', 'HORMIGA, ABEJA, MARIPOSA, GRILLO, MOSCA, MOSQUITO, ESCARABAJO, LIBELULA, ARAÑA, SALTAMONTES')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🐝</span><span class="font-bold text-gray-600 text-[10px] uppercase">Insectos</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Aves', 'AGUILA, LORO, COLIBRI, BUHO, CISNE, PATO, PALOMA, FLAMENCO, CANARIO, PAVO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦜</span><span class="font-bold text-gray-600 text-[10px] uppercase">Aves</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Verduras', 'ZANAHORIA, TOMATE, LECHUGA, CEBOLLA, PAPA, PEPINO, BROCOLI, ESPINACA, CALABAZA, AJO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🥦</span><span class="font-bold text-gray-600 text-[10px] uppercase">Verduras</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Clima', 'LLUVIA, SOL, VIENTO, NIEVE, TRUENO, NIEBLA, HURACAN, RAYO, TORNADO, CALOR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">⛈️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Clima</span></button>
+                <button data-cat="naturaleza" onclick="setThemeSug('Naturaleza', 'MONTAÑA, RIO, BOSQUE, LAGO, CUEVA, DESIERTO, VALLE, CASCADA, SELVA, PRADERA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🏞️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Paisajes</span></button>
+                
+                <button data-cat="hogar" onclick="setThemeSug('Habitación', 'CAMA, ALMOHADA, SABANA, ARMARIO, LAMPARA, ESPEJO, ALFOMBRA, CUADRO, SILLA, ESCRITORIO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🛏️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dormitorio</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Cocina', 'PLATO, VASO, TENEDOR, CUCHARA, CUCHILLO, SARTEN, OLLA, HORNO, NEVERA, LICUADORA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍳</span><span class="font-bold text-gray-600 text-[10px] uppercase">Cocina</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Higiene', 'JABON, CHAMPU, TOALLA, CEPILLO, PASTA, PEINE, ESPONJA, DUCHA, ESPEJO, CREMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🧼</span><span class="font-bold text-gray-600 text-[10px] uppercase">Baño</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Herramientas', 'MARTILLO, CLAVO, TORNILLO, PINZAS, SIERRA, LLAVE, TALADRO, METRO, NIVEL, LIMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🔨</span><span class="font-bold text-gray-600 text-[10px] uppercase">Taller</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Comida', 'PIZZA, PASTA, SOPA, ARROZ, CARNE, HUEVO, PAN, ENSALADA, TACO, QUESO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Comida</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Postres', 'PASTEL, HELADO, DONA, GALLETA, CHOCOLATE, GELATINA, FLAN, CHURRO, CARAMELO, BROWNIE')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍰</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dulces</span></button>
+                <button data-cat="hogar" onclick="setThemeSug('Prenda Ropa', 'CAMISA, PANTALON, ZAPATO, CHAQUETA, FALDA, VESTIDO, CALCETIN, GORRA, GUANTE, CINTURON')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">👕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Ropa</span></button>
+                
+                <button data-cat="escuela" onclick="setThemeSug('Escuela', 'LAPIZ, LIBRO, TAREA, RECREO, REGLA, EXAMEN, MOCHILA, MAESTRO, CLASE, PIZARRA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎒</span><span class="font-bold text-gray-600 text-[10px] uppercase">Escuela</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Profesiones', 'DOCTOR, INGENIERO, ABOGADO, POLICIA, BOMBERO, CHEF, PILOTO, DENTISTA, ENFERMERO, ARQUITECTO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">👨‍⚕️</span><span class="font-bold text-gray-600 text-[10px] uppercase">Oficios</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Cuerpo', 'CABEZA, MANO, PIE, BRAZO, OJOS, BOCA, NARIZ, OREJA, CORAZON, CUELLO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🧠</span><span class="font-bold text-gray-600 text-[10px] uppercase">Cuerpo</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Días y Meses', 'LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, ENERO, FEBRERO, MARZO, ABRIL, MAYO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">📅</span><span class="font-bold text-gray-600 text-[10px] uppercase">Calendario</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Colores', 'ROJO, AZUL, VERDE, AMARILLO, ROSA, NEGRO, BLANCO, MORADO, NARANJA, GRIS')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎨</span><span class="font-bold text-gray-600 text-[10px] uppercase">Colores</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Países', 'MEXICO, ESPAÑA, FRANCIA, ITALIA, JAPON, BRASIL, CANADA, EGIPTO, ALEMANIA, CHINA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🌎</span><span class="font-bold text-gray-600 text-[10px] uppercase">Países</span></button>
+                <button data-cat="escuela" onclick="setThemeSug('Sentimientos', 'ALEGRIA, TRISTEZA, MIEDO, ENOJO, AMOR, SORPRESA, CALMA, CELOS, ASCO, CURIOSIDAD')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">😊</span><span class="font-bold text-gray-600 text-[10px] uppercase">Emociones</span></button>
+                
+                <button data-cat="diversion" onclick="setThemeSug('Dinosaurios', 'REX, TRICERATOPS, RAPTOR, DIPLODOCUS, ESTEGOSAURIO, PTERODACTILO, ALOSAURIO, ANQUILOSAURIO, ESPINOSAURIO, BRAQUIOSAURIO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦖</span><span class="font-bold text-gray-600 text-[10px] uppercase">Dinos</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Deportes', 'FUTBOL, TENIS, BOXEO, NATACION, BASQUET, VOLEIBOL, CICLISMO, ATLETISMO, KARATE, GOLF')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">⚽</span><span class="font-bold text-gray-600 text-[10px] uppercase">Deportes</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Fantasía', 'DRAGON, MAGO, HADA, UNICORNIO, SIRENA, DUENDE, GIGANTE, CASTILLO, ESPADA, POCIMA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦄</span><span class="font-bold text-gray-600 text-[10px] uppercase">Mágico</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Instrumentos', 'PIANO, GUITARRA, VIOLIN, FLAUTA, TAMBOR, TROMBON, ARPA, SAXOFON, CLARINETE, TROMPETA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎸</span><span class="font-bold text-gray-600 text-[10px] uppercase">Música</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Cine', 'PELICULA, ACTOR, CAMARA, PANTALLA, DIRECTOR, GUION, COTUFA, OSCAR, SONIDO, BUTACA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎬</span><span class="font-bold text-gray-600 text-[10px] uppercase">Cine</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Transporte', 'AVION, BARCO, TREN, CARRO, MOTO, BICI, METRO, TAXI, CAMION, COHETE')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🚕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Viaje</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Súper Héroes', 'PODER, CAPA, MASCARA, HEROE, VILLANO, JUSTICIA, FUERZA, VUELO, ESCUDO, MISION')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦸</span><span class="font-bold text-gray-600 text-[10px] uppercase">Héroes</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Juguetes', 'BALON, MUÑECA, CARRITO, TREN, LEGO, PELUCHE, COMETA, TROMPO, CANICA, DADO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🧸</span><span class="font-bold text-gray-600 text-[10px] uppercase">Juguetes</span></button>
+                <button data-cat="diversion" onclick="setThemeSug('Videojuegos', 'NIVEL, MISION, CONSOLA, MANDO, PUNTOS, SALTO, MUNDO, AVATAR, PODER, JEFE')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎮</span><span class="font-bold text-gray-600 text-[10px] uppercase">Gaming</span></button>
             </div>
         </div>
 
-        <div id="sopa-container" class="hidden bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-200 mb-20 text-center relative">
-            
+        <div id="sopa-container" class="hidden bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-200 mb-20 relative">
             <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4 no-print border-b pb-6">
-                <div class="text-left text-gray-400 text-xs font-bold uppercase tracking-widest">Documento Listo</div>
+                <div class="text-left text-gray-400 text-xs font-bold uppercase tracking-widest">Documento Listo para Imprimir</div>
                 <div class="flex gap-2">
                     <button onclick="toggleSolution()" class="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-amber-200 transition">💡 SOLUCIÓN</button>
                     <button onclick="downloadPNG()" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-indigo-200 transition">🖼️ DESCARGAR PNG</button>
@@ -195,7 +149,6 @@
                 </div>
 
                 <h2 id="display-title" class="text-3xl md:text-4xl font-black mb-10 uppercase tracking-[0.2em] dynamic-title border-b-4 pb-4 inline-block">SOPA DE LETRAS</h2>
-                
                 <div id="grid-target" class="grid gap-0 mx-auto border-2 border-gray-800 w-fit bg-white mb-10 shadow-sm"></div>
                 
                 <div class="mt-12 text-left">
@@ -203,31 +156,30 @@
                     <div id="word-legend" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 font-bold text-gray-500 uppercase text-xs"></div>
                 </div>
 
-                <div class="mt-16 pt-6 border-t border-gray-200 text-center text-xs text-gray-400 italic no-print-text">
-                    Generado gratis en: tu-sitio-web.vercel.app | Prohibida su venta.
+                <div class="mt-16 pt-6 border-t border-gray-200 text-center text-[10px] text-gray-400 italic">
+                    Generado gratis en: SopaMaster Pro | Recursos Educativos
                 </div>
             </div>
 
             <div class="mt-12 flex flex-col md:flex-row gap-4 no-print border-t pt-8">
                 <button onclick="window.print()" class="flex-1 bg-green-600 text-white py-4 rounded-xl font-bold hover:bg-green-700 transition shadow-lg flex items-center justify-center gap-2 text-lg">
-                    <span>🖨️</span> IMPRIMIR DOCUMENTO PDF
+                    <span>🖨️</span> IMPRIMIR PDF
                 </button>
-                <button onclick="location.reload()" class="bg-gray-100 text-gray-500 px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition">LIMPIAR TODO</button>
+                <button onclick="location.reload()" class="bg-gray-100 text-gray-500 px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition">LIMPIAR</button>
             </div>
         </div>
     </main>
 
     <div id="cookie-banner" class="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-4 z-[60] flex items-center justify-between no-print shadow-2xl">
-        <p class="text-[10px] md:text-xs text-gray-300">Usamos cookies para analizar tráfico anónimo. <button onclick="openModal('privacy-modal')" class="underline hover:text-white">Privacidad.</button></p>
-        <button onclick="acceptCookies()" class="bg-indigo-500 px-4 py-1 rounded font-bold text-xs hover:bg-indigo-600 transition">Aceptar</button>
+        <p class="text-[10px] md:text-xs text-gray-300">Usamos cookies para estadísticas. <button onclick="openModal('privacy-modal')" class="underline hover:text-white">Privacidad.</button></p>
+        <button onclick="acceptCookies()" class="bg-indigo-500 px-4 py-1 rounded font-bold text-xs hover:bg-indigo-600">Aceptar</button>
     </div>
 
     <div id="privacy-modal" class="fixed inset-0 bg-black/50 hidden z-[100] p-4 items-center justify-center no-print">
-        <div class="bg-white rounded-3xl p-8 max-w-xl text-left shadow-2xl animate-fade-in">
+        <div class="bg-white rounded-3xl p-8 max-w-xl text-left shadow-2xl transition-all">
             <h2 class="text-xl font-bold mb-4 border-b pb-2">Aviso de Privacidad</h2>
-            <p class="text-sm text-gray-600 mb-4"><strong>1. Local:</strong> SopaMaster Pro funciona localmente en su navegador. No guardamos sus palabras ni datos.</p>
-            <p class="text-sm text-gray-600 mb-4"><strong>2. Cookies:</strong> Usamos Google Analytics para estadísticas de visita. No podemos identificarlo personalmente.</p>
-            <button onclick="closeModal('privacy-modal')" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold mt-4 dynamic-btn-bg">Cerrar</button>
+            <p class="text-sm text-gray-600 mb-4">Esta herramienta funciona localmente. No almacenamos sus palabras. Usamos Google Analytics de forma anónima para mejorar el servicio.</p>
+            <button onclick="closeModal('privacy-modal')" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold mt-4 w-full">Cerrar</button>
         </div>
     </div>
 
@@ -237,24 +189,34 @@
         let wordLocations = new Set();
         let currentTheme = 'indigo';
 
-        // Idea 2: Sistema de Temas de Color
         function setTheme(theme) {
             currentTheme = theme;
-            const body = document.getElementById('body-theme');
+            document.getElementById('body-theme').className = `bg-pattern min-h-screen font-sans theme-${theme}`;
             const nav = document.querySelector('nav');
-            const genBtn = document.querySelector('.dynamic-btn-bg');
-            const modalBtn = document.querySelector('#privacy-modal .dynamic-btn-bg');
-
-            body.className = `bg-pattern min-h-screen font-sans theme-${theme}`;
+            const genBtn = document.getElementById('btn-generate');
             
-            // Actualizar colores de fondo dinámicamente
-            if(theme === 'bw') {
-                nav.classList.remove('bg-indigo-700', 'bg-green-700', 'bg-red-700'); nav.classList.add('bg-gray-900');
-                genBtn.classList.remove('bg-indigo-600', 'bg-green-600', 'bg-red-600'); genBtn.classList.add('bg-black');
-            } else {
-                nav.classList.remove('bg-indigo-700', 'bg-green-700', 'bg-red-700', 'bg-gray-900'); nav.classList.add(`bg-${theme}-700`);
-                genBtn.classList.remove('bg-indigo-600', 'bg-green-600', 'bg-red-600', 'bg-black'); genBtn.classList.add(`bg-${theme}-600`);
-            }
+            nav.classList.remove('bg-indigo-700', 'bg-green-700', 'bg-red-700', 'bg-gray-900');
+            genBtn.classList.remove('bg-indigo-600', 'bg-green-600', 'bg-red-600', 'bg-black');
+
+            if(theme === 'bw') { nav.classList.add('bg-gray-900'); genBtn.classList.add('bg-black'); }
+            else { nav.classList.add(`bg-${theme}-700`); genBtn.classList.add(`bg-${theme}-600`); }
+        }
+
+        // Sistema de Filtrado de Pestañas
+        function filterTabs(category) {
+            const btns = document.querySelectorAll('.tab-btn');
+            const themes = document.querySelectorAll('#themes-grid button');
+
+            btns.forEach(b => b.classList.remove('tab-active'));
+            document.querySelector(`[data-cat="${category}"]`).classList.add('tab-active');
+
+            themes.forEach(t => {
+                if (category === 'todas' || t.getAttribute('data-cat') === category) {
+                    t.classList.remove('hidden');
+                } else {
+                    t.classList.add('hidden');
+                }
+            });
         }
 
         function setThemeSug(title, words) {
@@ -270,7 +232,7 @@
             const difficulty = document.getElementById('difficulty').value;
             currentSize = parseInt(document.getElementById('grid-size').value);
 
-            if (words.length === 0) { alert("Por favor, ingresa palabras."); return; }
+            if (words.length === 0) { alert("Ingresa palabras."); return; }
             document.getElementById('display-title').innerText = titleInput;
             generateLogic(words, difficulty);
         }
@@ -278,7 +240,6 @@
         function generateLogic(words, diff) {
             grid = Array(currentSize).fill().map(() => Array(currentSize).fill(''));
             wordLocations.clear();
-
             const directions = {
                 easy: [[0,1], [1,0]],
                 medium: [[0,1], [1,0], [1,1], [-1,1]],
@@ -303,11 +264,7 @@
             });
 
             const alpha = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-            for(let r=0; r<currentSize; r++) {
-                for(let c=0; c<currentSize; c++) {
-                    if(grid[r][c]==='') grid[r][c]=alpha.charAt(Math.floor(Math.random()*alpha.length));
-                }
-            }
+            for(let r=0; r<currentSize; r++) for(let c=0; c<currentSize; c++) if(grid[r][c]==='') grid[r][c]=alpha.charAt(Math.floor(Math.random()*alpha.length));
             renderGrid(words);
         }
 
@@ -322,47 +279,22 @@
         function renderGrid(words) {
             const target = document.getElementById('grid-target'); target.innerHTML = '';
             target.style.gridTemplateColumns = `repeat(${currentSize}, minmax(0, 1fr))`;
-            
             let cellSize = currentSize == 20 ? 'w-[25px] h-[25px] text-[10px]' : currentSize == 10 ? 'w-[45px] h-[45px] text-2xl' : 'w-[35px] h-[35px] text-lg';
-
             grid.forEach((row, r) => row.forEach((l, c) => {
-                const div = document.createElement('div');
-                div.className = `grid-cell ${cellSize} bg-white text-gray-900`;
-                div.id = `cell-${r}-${c}`;
-                div.innerText = l;
-                target.appendChild(div);
+                const div = document.createElement('div'); div.className = `grid-cell ${cellSize} bg-white text-gray-900`;
+                div.id = `cell-${r}-${c}`; div.innerText = l; target.appendChild(div);
             }));
-
-            document.getElementById('word-legend').innerHTML = words.map(w => `<div class="flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full dynamic-title-bg"></div>${w}</div>`).join('');
-            
-            // Actualizar colores dinámicos dentro de la sopa
-            document.querySelectorAll('.dynamic-title-bg').forEach(el => {
-                if(currentTheme === 'bw') el.style.backgroundColor = '#000000';
-                else el.style.backgroundColor = `var(--main-color)`;
-            });
-
+            document.getElementById('word-legend').innerHTML = words.map(w => `<span>• ${w}</span>`).join('');
             document.getElementById('sopa-container').classList.remove('hidden');
             window.scrollTo({ top: document.getElementById('sopa-container').offsetTop - 20, behavior: 'smooth' });
         }
 
-        function toggleSolution() {
-            wordLocations.forEach(loc => {
-                document.getElementById(`cell-${loc}`).classList.toggle('bg-solution');
-            });
-        }
-
-        // Idea 1: Descargar como Imagen PNG
+        function toggleSolution() { wordLocations.forEach(loc => document.getElementById(`cell-${loc}`).classList.toggle('bg-solution')); }
         function downloadPNG() {
             const doc = document.getElementById('sopa-documento');
-            const title = document.getElementById('display-title').innerText;
-            
-            html2canvas(doc, {
-                scale: 2, // Alta calidad
-                logging: false,
-                useCORS: true
-            }).then(canvas => {
+            html2canvas(doc, { scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `sopa-letras-${title.toLowerCase().replace(/ /g, '-')}.png`;
+                link.download = `sopa-master-${Date.now()}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
