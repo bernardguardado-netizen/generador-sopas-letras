@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SopaMaster Pro | Generador de Sopas de Letras Inteligente</title>
+    <title>SopaMaster Pro | Generador y Juego de Sopa de Letras</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print { 
@@ -12,11 +12,13 @@
             body { background: white !important; }
         }
         .grid-cell { 
-            width: 35px; height: 35px; 
             display: flex; align-items: center; justify-content: center; 
             font-weight: bold; border: 1px solid #d1d5db; 
-            text-transform: uppercase; font-family: 'Courier New', Courier, monospace; 
+            text-transform: uppercase; font-family: 'Courier New', Courier, monospace;
+            transition: all 0.3s;
         }
+        .is-word { color: #4f46e5; } /* Color de la palabra en modo solución */
+        .bg-solution { background-color: #fef08a !important; border-color: #facc15 !important; }
         .bg-pattern { 
             background-color: #f3f4f6; 
             background-image: radial-gradient(#d1d5db 0.5px, #f3f4f6 0.5px); 
@@ -27,129 +29,101 @@
 <body class="bg-pattern min-h-screen font-sans">
 
     <nav class="bg-indigo-700 p-4 shadow-lg no-print">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-white font-black text-2xl tracking-tighter italic">SOPAMASTER PRO</h1>
-            <button onclick="openModal('privacy-modal')" class="text-indigo-200 text-xs hover:text-white transition font-bold uppercase">Privacidad</button>
+            <div id="timer" class="text-white font-mono text-xl bg-indigo-900 px-4 py-1 rounded-full hidden md:block">00:00</div>
+            <button onclick="openModal('privacy-modal')" class="text-indigo-100 text-xs font-bold uppercase">Privacidad</button>
         </div>
     </nav>
 
-    <main class="max-w-5xl mx-auto p-6 text-center">
+    <main class="max-w-6xl mx-auto p-6 text-center">
         
         <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 no-print mb-10 text-left">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Configura tu Sopa de Letras</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Panel de Control</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">1. Título del Tema</label>
-                    <input type="text" id="sopa-title-input" placeholder="Ej: Mis Palabras Favoritas" 
-                        class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Título</label>
+                    <input type="text" id="sopa-title-input" placeholder="Ej: Mis Palabras" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">2. Nivel de Dificultad</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Tamaño del Reto</label>
+                    <select id="grid-size" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="10">Niños (10x10)</option>
+                        <option value="15" selected>Normal (15x15)</option>
+                        <option value="20">Experto (20x20)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Dificultad</label>
                     <select id="difficulty" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="easy">Fácil (Normal)</option>
-                        <option value="medium">Medio (Con Diagonales)</option>
-                        <option value="hard">Difícil (Invertidas)</option>
+                        <option value="easy">Fácil</option>
+                        <option value="medium">Medio</option>
+                        <option value="hard">Difícil</option>
                     </select>
                 </div>
             </div>
 
-            <label class="block text-sm font-bold text-gray-700 mb-2">3. Palabras (10 recomendadas, separadas por comas)</label>
-            <textarea id="word-list" rows="3" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-xl mb-6 outline-none focus:ring-2 focus:ring-indigo-500" 
-                placeholder="PALABRA1, PALABRA2, PALABRA3..."></textarea>
+            <label class="block text-sm font-bold text-gray-700 mb-2">Palabras (separadas por comas)</label>
+            <textarea id="word-list" rows="2" class="w-full p-4 bg-gray-50 border border-gray-300 rounded-xl mb-6 outline-none focus:ring-2 focus:ring-indigo-500" placeholder="PALABRA1, PALABRA2..."></textarea>
             
-            <button onclick="initSopa()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg text-lg">
-                🚀 GENERAR AHORA
-            </button>
+            <button onclick="initSopa()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg text-lg">🚀 GENERAR Y JUGAR</button>
         </div>
 
         <div class="mt-8 mb-12 no-print text-left">
-            <h3 class="text-lg font-bold text-gray-700 mb-6 italic underline decoration-indigo-300 px-2">Temas Listos (10 palabras cada uno):</h3>
+            <h3 class="text-lg font-bold text-gray-700 mb-6 px-2 italic underline decoration-indigo-300">Temas Listos (10 palabras):</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                
-                <button onclick="setTheme('Selva', 'LEON, TIGRE, MONO, SERPIENTE, JIRAFA, TUCAN, CEBRA, PANTERA, RINOCERONTE, COCODRILO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🦁</span><span class="font-bold text-gray-600 text-[11px] uppercase">Selva</span>
-                </button>
-
-                <button onclick="setTheme('Espacio', 'PLANETA, COHETE, ESTRELLA, GALAXIA, LUNA, SOL, COMETA, ASTRONAUTA, METEORITO, ORBITA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🚀</span><span class="font-bold text-gray-600 text-[11px] uppercase">Espacio</span>
-                </button>
-
-                <button onclick="setTheme('Frutas', 'MANZANA, PERA, PLATANO, UVA, FRESA, MANGO, SANDIA, PIÑA, CEREZA, NARANJA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🍎</span><span class="font-bold text-gray-600 text-[11px] uppercase">Frutas</span>
-                </button>
-
-                <button onclick="setTheme('Océano', 'TIBURON, BALLENA, PULPO, DELFIN, CORAL, MEDUSA, TORTUGA, CANGREJO, ESTRELLA, CALAMAR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🐙</span><span class="font-bold text-gray-600 text-[11px] uppercase">Océano</span>
-                </button>
-
-                <button onclick="setTheme('Deportes', 'FUTBOL, TENIS, BOXEO, NATACION, BASQUET, VOLEIBOL, CICLISMO, ATLETISMO, KARATE, GOLF')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">⚽</span><span class="font-bold text-gray-600 text-[11px] uppercase">Deportes</span>
-                </button>
-
-                <button onclick="setTheme('Cuerpo', 'CABEZA, MANO, PIE, BRAZO, OJOS, BOCA, NARIZ, OREJA, CORAZON, CUELLO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🧠</span><span class="font-bold text-gray-600 text-[11px] uppercase">Cuerpo</span>
-                </button>
-
-                <button onclick="setTheme('Clima', 'LLUVIA, SOL, VIENTO, NIEVE, TRUENO, NIEBLA, HURACAN, RAYO, TORNADO, CALOR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">⛈️</span><span class="font-bold text-gray-600 text-[11px] uppercase">Clima</span>
-                </button>
-
-                <button onclick="setTheme('Escuela', 'LAPIZ, CUADERNO, LIBRO, MAESTRO, RECREO, TAREA, MOCHILA, PIZARRA, EXAMEN, REGLA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🎒</span><span class="font-bold text-gray-600 text-[11px] uppercase">Escuela</span>
-                </button>
-
-                <button onclick="setTheme('Colores', 'ROJO, AZUL, VERDE, AMARILLO, ROSA, NEGRO, BLANCO, MORADO, NARANJA, GRIS')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🎨</span><span class="font-bold text-gray-600 text-[11px] uppercase">Colores</span>
-                </button>
-
-                <button onclick="setTheme('Países', 'MEXICO, ESPAÑA, FRANCIA, ITALIA, JAPON, BRASIL, CANADA, EGIPTO, ALEMANIA, CHINA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🌎</span><span class="font-bold text-gray-600 text-[11px] uppercase">Países</span>
-                </button>
-
-                <button onclick="setTheme('Comida', 'PIZZA, HAMBURGUESA, PASTA, ENSALADA, SOPA, ARROZ, CARNE, PESCADO, HUEVO, PAN')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🍕</span><span class="font-bold text-gray-600 text-[11px] uppercase">Comida</span>
-                </button>
-
-                <button onclick="setTheme('Transporte', 'AVION, BARCO, TREN, CARRO, MOTO, BICI, METRO, TAXI, CAMION, COHETE')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left">
-                    <span class="text-xl block mb-1">🚀</span><span class="font-bold text-gray-600 text-[11px] uppercase">Viaje</span>
-                </button>
-
+                <button onclick="setTheme('Selva', 'LEON, TIGRE, MONO, SERPIENTE, JIRAFA, TUCAN, CEBRA, PANTERA, RINOCERONTE, COCODRILO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🦁</span><span class="font-bold text-gray-600 text-[10px] uppercase">Selva</span></button>
+                <button onclick="setTheme('Espacio', 'PLANETA, COHETE, ESTRELLA, GALAXIA, LUNA, SOL, COMETA, ASTRONAUTA, METEORITO, ORBITA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🚀</span><span class="font-bold text-gray-600 text-[10px] uppercase">Espacio</span></button>
+                <button onclick="setTheme('Océano', 'TIBURON, BALLENA, PULPO, DELFIN, CORAL, MEDUSA, TORTUGA, CANGREJO, ESTRELLA, CALAMAR')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🐙</span><span class="font-bold text-gray-600 text-[10px] uppercase">Océano</span></button>
+                <button onclick="setTheme('Frutas', 'MANZANA, PERA, PLATANO, UVA, FRESA, MANGO, SANDIA, PIÑA, CEREZA, NARANJA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍎</span><span class="font-bold text-gray-600 text-[10px] uppercase">Frutas</span></button>
+                <button onclick="setTheme('Comida', 'PIZZA, PASTA, SOPA, ARROZ, CARNE, HUEVO, PAN, ENSALADA, TACO, QUESO')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🍕</span><span class="font-bold text-gray-600 text-[10px] uppercase">Comida</span></button>
+                <button onclick="setTheme('Escuela', 'LAPIZ, LIBRO, TAREA, RECREO, REGLA, EXAMEN, MOCHILA, MAESTRO, CLASE, PIZARRA')" class="bg-white p-3 rounded-xl border hover:border-indigo-500 transition shadow-sm text-left"><span class="text-xl block">🎒</span><span class="font-bold text-gray-600 text-[10px] uppercase">Escuela</span></button>
             </div>
         </div>
 
-        <div id="sopa-container" class="hidden bg-white p-10 rounded-3xl shadow-2xl border border-gray-200 mb-20">
-            <h2 id="display-title" class="text-3xl md:text-4xl font-black mb-10 uppercase tracking-[0.2em] text-gray-800 border-b-4 border-indigo-600 pb-4 inline-block">SOPA DE LETRAS</h2>
-            <div id="grid-target" class="grid gap-0 mx-auto border-2 border-gray-800 w-fit bg-white mb-10"></div>
-            <div class="mt-12 text-left">
-                <h3 class="font-black text-xl border-b-2 border-gray-300 mb-6 pb-2 text-gray-700 uppercase">Lista de Palabras:</h3>
-                <div id="word-legend" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 font-bold text-gray-600 uppercase text-sm"></div>
+        <div id="sopa-container" class="hidden bg-white p-6 md:p-10 rounded-3xl shadow-2xl border border-gray-200 mb-20">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                <h2 id="display-title" class="text-2xl md:text-3xl font-black uppercase tracking-widest text-gray-800 border-b-4 border-indigo-600 pb-2">SOPA DE LETRAS</h2>
+                <div class="flex gap-2 no-print">
+                    <button onclick="toggleSolution()" class="bg-amber-100 text-amber-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-amber-200 transition">💡 VER SOLUCIÓN</button>
+                    <div id="mobile-timer" class="md:hidden bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-mono font-bold text-sm">00:00</div>
+                </div>
             </div>
+
+            <div id="grid-target" class="grid gap-0 mx-auto border-2 border-gray-800 w-fit bg-white mb-10 shadow-lg"></div>
+            
+            <div class="mt-12 text-left">
+                <h3 class="font-black text-xl border-b-2 border-gray-300 mb-6 pb-2 text-gray-700 uppercase">Palabras a encontrar:</h3>
+                <div id="word-legend" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 font-bold text-gray-500 uppercase text-xs"></div>
+            </div>
+
             <div class="mt-12 flex flex-col md:flex-row gap-4 no-print">
                 <button onclick="window.print()" class="flex-1 bg-green-500 text-white py-4 rounded-xl font-bold hover:bg-green-600 transition shadow-lg">🖨️ IMPRIMIR / PDF</button>
-                <button onclick="location.reload()" class="bg-gray-100 text-gray-500 px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition">NUEVA SOPA</button>
+                <button onclick="location.reload()" class="bg-gray-100 text-gray-500 px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition">REINICIAR</button>
             </div>
         </div>
     </main>
 
-    <div id="cookie-banner" class="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-4 z-[60] flex flex-col md:flex-row items-center justify-between gap-4 no-print shadow-2xl">
-        <p class="text-[10px] md:text-xs text-gray-300">Utilizamos cookies para analizar el tráfico. Al usar este sitio, aceptas nuestra <button onclick="openModal('privacy-modal')" class="underline">política de privacidad</button>.</p>
-        <button onclick="acceptCookies()" class="bg-indigo-500 px-6 py-2 rounded-lg font-bold text-xs transition-all hover:bg-indigo-600">Aceptar</button>
+    <div id="cookie-banner" class="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-4 z-[60] flex flex-col md:flex-row items-center justify-between gap-4 no-print">
+        <p class="text-[10px] md:text-xs text-gray-300">Este sitio utiliza cookies para análisis anónimo. <button onclick="openModal('privacy-modal')" class="underline">Privacidad.</button></p>
+        <button onclick="acceptCookies()" class="bg-indigo-500 px-6 py-1 rounded-lg font-bold text-xs">Aceptar</button>
     </div>
 
-    <div id="privacy-modal" class="fixed inset-0 bg-black/50 hidden z-[100] p-4 flex items-center justify-center no-print text-left">
-        <div class="bg-white rounded-3xl p-8 max-w-2xl max-h-[80vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-4">Aviso de Privacidad</h2>
-            <p class="text-sm text-gray-600 mb-4"><strong>1. Datos Locales:</strong> Esta herramienta procesa las palabras en su propio navegador. No enviamos sus listas de palabras a ningún servidor externo.</p>
-            <p class="text-sm text-gray-600 mb-4"><strong>2. Cookies:</strong> Usamos Google Analytics para estadísticas de visita. Esto no nos permite identificarlo personalmente.</p>
-            <p class="text-sm text-gray-600 mb-4"><strong>3. Uso Educativo:</strong> Este sitio es gratuito y busca apoyar a docentes y padres de familia.</p>
-            <button onclick="closeModal('privacy-modal')" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold mt-4">Entendido</button>
+    <div id="privacy-modal" class="fixed inset-0 bg-black/50 hidden z-[100] p-4 items-center justify-center no-print">
+        <div class="bg-white rounded-3xl p-8 max-w-xl text-left">
+            <h2 class="text-xl font-bold mb-4">Aviso Legal</h2>
+            <p class="text-sm text-gray-600 mb-4">SopaMaster Pro procesa los juegos en tu navegador. No guardamos tus listas de palabras. Las cookies se usan solo para estadísticas anónimas de Google Analytics.</p>
+            <button onclick="closeModal('privacy-modal')" class="bg-indigo-600 text-white px-6 py-2 rounded-xl font-bold">Cerrar</button>
         </div>
     </div>
 
     <script>
-        const size = 15;
+        let currentSize = 15;
         let grid = [];
+        let wordLocations = new Set();
+        let seconds = 0;
+        let timerInterval;
 
         function setTheme(title, words) {
             document.getElementById('sopa-title-input').value = title;
@@ -158,57 +132,101 @@
         }
 
         function initSopa() {
-            const titleInput = document.getElementById('sopa-title-input').value || "Sopa de Letras Master";
+            const titleInput = document.getElementById('sopa-title-input').value || "Sopa de Letras";
             const input = document.getElementById('word-list').value;
-            const words = input.split(',').map(w => w.trim().toUpperCase()).filter(w => w.length > 1 && w.length <= size);
+            const words = input.split(',').map(w => w.trim().toUpperCase()).filter(w => w.length > 1);
             const difficulty = document.getElementById('difficulty').value;
-            if (words.length === 0) { alert("Ingresa palabras separadas por comas."); return; }
+            currentSize = parseInt(document.getElementById('grid-size').value);
+
+            if (words.length === 0) { alert("Ingresa algunas palabras."); return; }
+            
             document.getElementById('display-title').innerText = titleInput;
+            startTimer();
             generateLogic(words, difficulty);
         }
 
+        function startTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            document.getElementById('timer').classList.remove('hidden');
+            timerInterval = setInterval(() => {
+                seconds++;
+                let m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                let s = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer').innerText = `${m}:${s}`;
+                document.getElementById('mobile-timer').innerText = `${m}:${s}`;
+            }, 1000);
+        }
+
         function generateLogic(words, diff) {
-            grid = Array(size).fill().map(() => Array(size).fill(''));
+            grid = Array(currentSize).fill().map(() => Array(currentSize).fill(''));
+            wordLocations.clear();
+
             const directions = {
                 easy: [[0,1], [1,0]],
                 medium: [[0,1], [1,0], [1,1], [-1,1]],
                 hard: [[0,1], [1,0], [1,1], [-1,1], [0,-1], [-1,0]]
             };
+
             words.forEach(word => {
                 let placed = false; let att = 0;
                 while (!placed && att < 150) {
                     const d = directions[diff][Math.floor(Math.random() * directions[diff].length)];
-                    const r = Math.floor(Math.random() * size), c = Math.floor(Math.random() * size);
+                    const r = Math.floor(Math.random() * currentSize), c = Math.floor(Math.random() * currentSize);
+                    
                     if (canPlace(word, r, c, d)) {
-                        for (let i = 0; i < word.length; i++) grid[r + i*d[0]][c + i*d[1]] = word[i];
+                        for (let i = 0; i < word.length; i++) {
+                            let nr = r + i*d[0], nc = c + i*d[1];
+                            grid[nr][nc] = word[i];
+                            wordLocations.add(`${nr}-${nc}`);
+                        }
                         placed = true;
                     }
                     att++;
                 }
             });
+
             const alpha = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-            for(let r=0; r<size; r++) for(let c=0; c<size; c++) if(grid[r][c]==='') grid[r][c]=alpha.charAt(Math.floor(Math.random()*alpha.length));
-            render();
-            document.getElementById('word-legend').innerHTML = words.map(w => `<span>• ${w}</span>`).join('');
-            document.getElementById('sopa-container').classList.remove('hidden');
+            for(let r=0; r<currentSize; r++) {
+                for(let c=0; c<currentSize; c++) {
+                    if(grid[r][c]==='') grid[r][c]=alpha.charAt(Math.floor(Math.random()*alpha.length));
+                }
+            }
+            renderGrid(words);
         }
 
         function canPlace(word, r, c, [dr, dc]) {
             for (let i = 0; i < word.length; i++) {
                 const nr = r + i * dr, nc = c + i * dc;
-                if (nr < 0 || nr >= size || nc < 0 || nc >= size || (grid[nr][nc] !== '' && grid[nr][nc] !== word[i])) return false;
+                if (nr < 0 || nr >= currentSize || nc < 0 || nc >= currentSize || (grid[nr][nc] !== '' && grid[nr][nc] !== word[i])) return false;
             }
             return true;
         }
 
-        function render() {
-            const container = document.getElementById('grid-target'); container.innerHTML = '';
-            container.style.gridTemplateColumns = `repeat(${size}, minmax(0, 1fr))`;
-            grid.flat().forEach(l => {
-                const div = document.createElement('div'); div.className = 'grid-cell text-lg md:text-xl bg-white';
-                div.innerText = l; container.appendChild(div);
-            });
+        function renderGrid(words) {
+            const target = document.getElementById('grid-target'); target.innerHTML = '';
+            target.style.gridTemplateColumns = `repeat(${currentSize}, minmax(0, 1fr))`;
+            
+            // Ajustar tamaño de celda según el grid
+            let cellSize = currentSize === 20 ? 'w-[25px] h-[25px] text-[10px]' : 'w-[35px] h-[35px] text-lg';
+
+            grid.forEach((row, r) => row.forEach((l, c) => {
+                const div = document.createElement('div');
+                div.className = `grid-cell ${cellSize} ${wordLocations.has(`${r}-${c}`) ? 'is-word' : ''}`;
+                div.id = `cell-${r}-${c}`;
+                div.innerText = l;
+                target.appendChild(div);
+            }));
+
+            document.getElementById('word-legend').innerHTML = words.map(w => `<span>• ${w}</span>`).join('');
+            document.getElementById('sopa-container').classList.remove('hidden');
             window.scrollTo({ top: document.getElementById('sopa-container').offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleSolution() {
+            wordLocations.forEach(loc => {
+                document.getElementById(`cell-${loc}`).classList.toggle('bg-solution');
+            });
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
